@@ -49,7 +49,7 @@ yarn build
 
 Для описания товара используется интерфейс IProduct
 
-```
+```ts
 interface IProduct {
 	id: string;
 	description: string;
@@ -62,7 +62,7 @@ interface IProduct {
 
 Для описания заказа используется интерфейс IOrder
 
-```
+```ts
 interface IOrder {
 	items: IProduct[];
 	payment: TOrderPayment;
@@ -74,7 +74,7 @@ interface IOrder {
 
 Для описания способов оплаты заказа используется тип TOrderPayment
 
-```
+```ts
 type TOrderPayment = 'cash' | 'card';
 ```
 
@@ -86,8 +86,8 @@ type TOrderPayment = 'cash' | 'card';
 
 В качестве набора HTTP методов использует тип TApiPostMethods
 
-```
-type TApiPostMethods = 'POST' | 'PUT' | 'DELETE'
+```ts
+type TApiPostMethods = 'POST' | 'PUT' | 'DELETE';
 ```
 
 ### Класс **EventEmitter**
@@ -96,7 +96,7 @@ type TApiPostMethods = 'POST' | 'PUT' | 'DELETE'
 
 Использует типы TEmitterEvent, TSubscriber, TEventName и интерфейс IEvents
 
-```
+```ts
 type TEventName = string | RegExp;
 
 type TSubscriber = Function;
@@ -146,7 +146,7 @@ interface IEvents {
 
 Доступный список событий описан типом TFormEventHandler
 
-```
+```ts
 type TFormEventHandlers = {
 	onSubmit: () => void;
 	onInput: () => void;
@@ -157,7 +157,7 @@ type TFormEventHandlers = {
 
 Отображение корзины. Содержит набор позиций корзины, общую сумму позиций, а также предоставляет возможность совершения действий по клику на кнопку оформления
 
-```
+```ts
 type TBasketRenderArgs = {
 	items: [];
 	price: string;
@@ -165,7 +165,7 @@ type TBasketRenderArgs = {
 
 type TBasketItemEventHandlers = {
 	onClick: () => void;
-}
+};
 ```
 
 ### Класс **Products**
