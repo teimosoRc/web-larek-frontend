@@ -1,4 +1,4 @@
-interface IProduct {
+export interface IProduct {
 	id: string;
 	description: string;
 	image: string;
@@ -7,7 +7,7 @@ interface IProduct {
 	price: number | null;
 }
 
-interface IOrder {
+export interface IOrder {
 	items: IProduct[];
 	payment: TOrderPayment;
 	address: string;
@@ -15,18 +15,16 @@ interface IOrder {
 	phone: string;
 }
 
-type TOrderPayment = 'cash' | 'card';
+export type TOrderPayment = 'cash' | 'card';
 
-type TFormEventHandlers = {
-	onSubmit: () => void;
-	onInput: () => void;
+export type TOrderStep = 'shipment' | 'contacts';
+
+export type TOrderInvoice = Omit<IOrder, 'items'> & {
+	items: string[];
+	total: number;
 };
 
-type TBasketRenderArgs = {
-	items: [];
-	price: string;
-};
-
-type TBasketItemEventHandlers = {
-	onClick: () => void;
+export interface IOrderResult {
+	id: string;
+	total: number;
 }
