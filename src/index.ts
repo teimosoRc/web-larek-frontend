@@ -5,7 +5,6 @@ import { EventEmitter } from './components/base/events';
 import { ShopAPI } from './components/shopApi/shopApi';
 import { AppStateModelEvents, AppStateModel } from './components/models/global/appState';
 import { IOrder, IProduct, TOrderStep } from './types';
-import { ProductsView } from './components/catalog/products';
 import {
 	cloneTemplate,
 	ensureElement,
@@ -15,16 +14,11 @@ import {
 import { ProductView, TProductRenderArgs } from './components/catalog/product';
 import { TViewNested } from './components/base/view';
 import { PageView } from './components/global/page';
-import { HeaderView } from './components/global/header';
 import { ModalView, ModalViewEvents } from './components/global/modal';
 import {
 	ProductPreviewView,
 	TProductPreviewRenderArgs,
 } from './components/catalog/productPreview';
-import {
-	BasketItemView,
-	TBasketItemRenderArgs,
-} from './components/basket/basketItem';
 import { BasketView, TBasketRenderArgs } from './components/basket/basket';
 import {
 	OrderShipmentView,
@@ -49,11 +43,6 @@ const appStateModel = new AppStateModel({}, eventEmitter);
 const pageView = new PageView({
 	element: ensureElement('.page'),
 	eventEmitter,
-});
-
-const headerView = new HeaderView({
-	element: ensureElement('.header'),
-	eventEmitter,
 	eventHandlers: {
 		onClick: () => {
 			appStateModel.initBasket();
@@ -63,11 +52,6 @@ const headerView = new HeaderView({
 
 const modalView = new ModalView({
 	element: ensureElement('#modal-container'),
-	eventEmitter,
-});
-
-const productsView = new ProductsView({
-	element: ensureElement('main.gallery'),
 	eventEmitter,
 });
 
@@ -99,7 +83,7 @@ eventEmitter.on<{
 	({ data }) => {
 		const { items } = data;
 
-		headerView.render({
+		pageView.render({
 			counter: items.length,
 		});
 	}
@@ -117,9 +101,9 @@ eventEmitter.on<{
 
 		const basketTotalPrice = appStateModel.getBasketPrice();
 
-		const basketItemsViews = items.map<TViewNested<TBasketItemRenderArgs>>(
+		const basketItemsViews = items.map<TViewNested<TProductRenderArgs>>(
 			(item, index) => {
-				const basketItemView = new BasketItemView({
+				const basketItemView = new ProductView({
 					element: cloneTemplate('#card-basket'),
 					eventEmitter,
 					eventHandlers: {
@@ -129,7 +113,7 @@ eventEmitter.on<{
 					},
 				});
 
-				const basketItemViewRenderArgs: TBasketItemRenderArgs = {
+				const basketItemViewRenderArgs: TProductRenderArgs = {
 					...item,
 					index: index + 1,
 					price: formatPrice(item.price, settings.CURRENCY_TITLES),
@@ -142,7 +126,7 @@ eventEmitter.on<{
 			}
 		);
 
-		modalView.render<TBasketRenderArgs<TBasketItemRenderArgs>>({
+		modalView.render<TBasketRenderArgs<TProductRenderArgs>>({
 			content: {
 				view: basketView,
 				renderArgs: {
@@ -178,6 +162,7 @@ eventEmitter.on<{ data: { item: IProduct } }>(
 							appStateModel.addBasketItem(item);
 						}
 					}
+					modalView.close();
 				},
 			},
 		});
@@ -234,7 +219,7 @@ eventEmitter.on<{ data: { items: IProduct[] } }>(
 			};
 		});
 
-		productsView.render<TProductRenderArgs>({
+		pageView.render<TProductRenderArgs>({
 			items: productsViews,
 		});
 	}
@@ -354,3 +339,5 @@ api
 	.catch((error) => {
 		console.error(error);
 	});
+
+	
