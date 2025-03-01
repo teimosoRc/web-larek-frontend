@@ -39,7 +39,6 @@ class AppState extends Model<IAppState> {
 	products: IProduct[] = [];
 
 	order: IOrder = {
-		items: [],
 		payment: '' as TOrderPayment,
 		address: '',
 		email: '',
@@ -127,10 +126,10 @@ class AppState extends Model<IAppState> {
 	getOrderInvoice() {
 		return {
 			...this.order,
-			items: this.order.items
+			items: this.basket
 				.filter((item) => item.price)
 				.map((item) => item.id),
-			total: this.order.items.reduce(
+			total: this.basket.reduce(
 				(accumulator, current) => accumulator + current.price,
 				0
 			),
@@ -139,8 +138,6 @@ class AppState extends Model<IAppState> {
 
 	// Инициализация заказа
 	initOrder() {
-		this.order.items = this.basket;
-
 		this.setStep('shipment');
 	}
 
@@ -148,7 +145,7 @@ class AppState extends Model<IAppState> {
 	resetOrder() {
 		this._step = 'shipment';
 
-		this.order.items = [];
+		this.basket = [];
 		this.order.payment = '' as TOrderPayment;
 		this.order.address = '';
 		this.order.email = '';
