@@ -8,7 +8,6 @@ export interface IProduct {
 }
 
 export interface IOrder {
-	items: IProduct[];
 	payment: TOrderPayment;
 	address: string;
 	email: string;
